@@ -19,8 +19,7 @@ import Home from './Home';
 import Statistics from './Statistics';
 import UserInfo from './UserInfo';
 import * as UiContext from '../../contexts/ui';
-import { RotateInUpLeft, SlideOutLeft } from 'react-native-reanimated';
-import { Route } from '@react-navigation/native';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,17 +43,9 @@ const StatisticsDrawer = createDrawerNavigator();
 //   };
 // };
 
-const getActiveRouteName = (state: any): string => {
-  if (!state || !state.routes) {
-    return '';
-  }
-  const route = state.routes[state.index];
-
-  if (route.state) {
-    return getActiveRouteName(route.state);
-  }
-
-  return RotateInUpLeft.name;
+const getActiveRouteName = (route: any): string => {
+  const flg: string = getFocusedRouteNameFromRoute(route) === 'USER_INFO' ? 'none' : 'flex';
+  return flg;
 }
 
 function HomeWithDrawer() {
@@ -65,7 +56,11 @@ function HomeWithDrawer() {
         component={Home} 
         options={{ headerShown: false }}
       />
-      <HomeDrawer.Screen name={USER_INFO} component={UserInfo} />
+      <HomeDrawer.Screen 
+        name={USER_INFO} 
+        component={UserInfo}
+        options={{ headerShown: false }} 
+      />
     </HomeDrawer.Navigator>
   );
 }
@@ -78,7 +73,11 @@ function StatisticsWithDrawer() {
         component={Statistics} 
         options={{ headerShown: false }}
       />
-      <StatisticsDrawer.Screen name={USER_INFO} component={UserInfo} />
+      <StatisticsDrawer.Screen 
+        name={USER_INFO} 
+        component={UserInfo}
+        options={{ headerShown: false }} 
+      />
     </StatisticsDrawer.Navigator>
   );
 }
@@ -93,13 +92,23 @@ function TabRoutes() {
       <Tab.Screen 
         name={HOME} 
         component={HomeWithDrawer}
-        options={{ headerShown: false }}
-        />
+        options={({ route }) => ({ 
+            headerShown: false,
+            tabBarStyle: {
+              display: getActiveRouteName(route)
+            },
+        })}
+      />
       <Tab.Screen 
         name={STATISTICS} 
         component={StatisticsWithDrawer}
-        options={{ headerShown: false }}
-        />
+        options={({ route }) => ({ 
+          headerShown: false,
+          tabBarStyle: {
+            display: getActiveRouteName(route)
+          },
+        })}
+      />
     </Tab.Navigator>
   );
 }
