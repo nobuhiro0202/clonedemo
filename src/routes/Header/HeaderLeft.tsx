@@ -8,7 +8,7 @@ export default function HeaderLeft() {
   const onPress =  useCallback(() => {
     dispatch(DrawerActions.openDrawer());
   }, [dispatch]);
-  
+
   return (
     <TouchableOpacity onPress={onPress}>
       <Text>open</Text>

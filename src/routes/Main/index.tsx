@@ -4,7 +4,7 @@ import {
   CardStyleInterpolators,
   StackCardInterpolationProps
 } from "@react-navigation/stack";
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { 
   INITIAL, 
@@ -23,7 +23,7 @@ import { RotateInUpLeft, SlideOutLeft } from 'react-native-reanimated';
 import { Route } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const HomeDrawer = createDrawerNavigator();
 const StatisticsDrawer = createDrawerNavigator();
 
@@ -89,16 +89,17 @@ function TabRoutes() {
       initialRouteName={HOME} 
       activeColor="#e91e63"
       barStyle={{ backgroundColor: 'tomato' }}
-      options={(props: any) => {
-        const routeName = getActiveRouteName(props.route.state);
-        
-      }}
     >
       <Tab.Screen 
         name={HOME} 
-        component={HomeWithDrawer} 
-      />
-      <Tab.Screen name={STATISTICS} component={StatisticsWithDrawer} />
+        component={HomeWithDrawer}
+        options={{ headerShown: false }}
+        />
+      <Tab.Screen 
+        name={STATISTICS} 
+        component={StatisticsWithDrawer}
+        options={{ headerShown: false }}
+        />
     </Tab.Navigator>
   );
 }
@@ -106,12 +107,24 @@ function TabRoutes() {
 function switchingAuthStatus(status: UiContext.Status) {
   switch (status) {
     case UiContext.Status.UN_ANTHORIZED:
-      return <Stack.Screen name={CHOOSE_LOGIN} component={ChooseLogin} options={{ headerShown: false }} />;
+      return <Stack.Screen 
+               name={CHOOSE_LOGIN} 
+               component={ChooseLogin} 
+               options={{ headerShown: false }} 
+             />;
     case UiContext.Status.ANTHORIZED:
-      return <Stack.Screen name={HOME} component={TabRoutes} options={{ headerShown: false }} />;
+      return <Stack.Screen 
+               name={HOME} 
+               component={TabRoutes} 
+               options={{ headerShown: false }}
+             />;
     case UiContext.Status.FIRST_OPEN:
     default:
-      return <Stack.Screen name={INITIAL} component={Initial} options={{ headerShown: false}} />
+      return <Stack.Screen 
+               name={INITIAL} 
+               component={Initial} 
+               options={{ headerShown: false}} 
+             />;
   }
 }
 
