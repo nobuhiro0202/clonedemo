@@ -10,13 +10,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function UserInfo() {
+export default function SignIn() {
   const { setApplicationState } = useContext(Context);
   return (
     <View style={styles.container}>
-      <Text>UserInfo</Text>
-      <TouchableOpacity onPress={() => setApplicationState(Status.UN_AUTHORIZED)}>
-        <Text>Sign out</Text>
+      <Text>Sign In</Text>
+      <TouchableOpacity onPress={() => setApplicationState(Status.AUTHORIZED)}>
+        <Text>sign in</Text>
       </TouchableOpacity>
     </View>
   );

@@ -3,8 +3,8 @@ import React, { createContext } from 'react';
 export enum Status {
   LOADING = 'loading',
   FIRST_OPEN = 'firstOpen',
-  UN_ANTHORIZED = 'unAuthorized',
-  ANTHORIZED = 'authorized',
+  UN_AUTHORIZED = 'unAuthorized',
+  AUTHORIZED = 'authorized',
 }
 
 export function createApplicationState(): Status {

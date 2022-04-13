@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import {
   createStackNavigator,
-  CardStyleInterpolators,
   StackCardInterpolationProps
 } from "@react-navigation/stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,40 +11,32 @@ import {
   HOME, 
   CHOOSE_LOGIN, 
   STATISTICS,
-  USER_INFO
+  USER_INFO,
+  SIGN_IN,
+  SIGN_UP
 } from '../../Constants/path';
-import { Initial, Loading, ChooseLogin } from '../../Components/pages';
+import { Initial, Loading, ChooseLogin, SignIn, SignUp } from '../../Components/pages';
 import Home from './Home';
 import Statistics from './Statistics';
 import UserInfo from './UserInfo';
 import * as UiContext from '../../contexts/ui';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
-const HomeDrawer = createDrawerNavigator();
-const StatisticsDrawer = createDrawerNavigator();
+const 
+Stack = createStackNavigator(),
+ChooseLoginStack = createStackNavigator(),
+Tab = createBottomTabNavigator(),
+HomeDrawer = createDrawerNavigator(),
+StatisticsDrawer = createDrawerNavigator();
 
-// const forFade = ({ current, next }: StackCardInterpolationProps) => {
-//   const opacity = Animated.add(
-//     current.progress,
-//     next ? next.progress : 0
-//   ).interpolate({
-//     inputRange: [0, 1, 2],
-//     outputRange: [0, 1, 0],
-//   });
-
-//   return {
-//     leftButtonStyle: { opacity },
-//     rightButtonStyle: { opacity },
-//     titleStyle: { opacity },
-//     backgroundStyle: { opacity },
-//   };
-// };
+const forFade = ({ current }: StackCardInterpolationProps) => ({
+  cardStyle: {
+    opacity: current.progress
+  }
+});
 
 const getActiveRouteName = (route: any): string => {
-  const flg: string = getFocusedRouteNameFromRoute(route) === 'USER_INFO' ? 'none' : 'flex';
-  return flg;
+  return getFocusedRouteNameFromRoute(route) === 'USER_INFO' ? 'none' : 'flex';
 }
 
 function HomeWithDrawer() {
@@ -113,15 +104,26 @@ function TabRoutes() {
   );
 }
 
+function ChooseLoginNavigator() {
+  return (
+    <ChooseLoginStack.Navigator initialRouteName={CHOOSE_LOGIN}>
+      <ChooseLoginStack.Screen name={CHOOSE_LOGIN} component={ChooseLogin} />
+      <ChooseLoginStack.Screen name={SIGN_IN} component={SignIn} />
+      <ChooseLoginStack.Screen name={SIGN_UP} component={SignUp} />
+    </ChooseLoginStack.Navigator>
+  );
+}
+
+
 function switchingAuthStatus(status: UiContext.Status) {
   switch (status) {
-    case UiContext.Status.UN_ANTHORIZED:
+    case UiContext.Status.UN_AUTHORIZED:
       return <Stack.Screen 
                name={CHOOSE_LOGIN} 
-               component={ChooseLogin} 
+               component={ChooseLoginNavigator} 
                options={{ headerShown: false }} 
              />;
-    case UiContext.Status.ANTHORIZED:
+    case UiContext.Status.AUTHORIZED:
       return <Stack.Screen 
                name={HOME} 
                component={TabRoutes} 
@@ -143,8 +145,9 @@ function AuthWithRoutes() {
     <Stack.Navigator 
       initialRouteName={LOADING}
       screenOptions={{
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-      }}>
+        cardStyleInterpolator: forFade,
+      }}
+    >
       {uiContext.applicationState !== UiContext.Status.LOADING ? (
         switchingAuthStatus(uiContext.applicationState)
       ) : (

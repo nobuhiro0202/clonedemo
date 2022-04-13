@@ -23,8 +23,8 @@ function ChangeStateButton(props: { state: UiContext.Status }) {
 export default function Loading() {
   return (
     <View style={styles.container}>
-      <ChangeStateButton state={UiContext.Status.ANTHORIZED} />
-      <ChangeStateButton state={UiContext.Status.UN_ANTHORIZED} />
+      <ChangeStateButton state={UiContext.Status.AUTHORIZED} />
+      <ChangeStateButton state={UiContext.Status.UN_AUTHORIZED} />
       <ChangeStateButton state={UiContext.Status.FIRST_OPEN} />
     </View>
   );

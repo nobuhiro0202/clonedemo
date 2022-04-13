@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { DETAIL } from '../../../Constants/path';
+import { DETAIL, INPUT } from '../../../Constants/path';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,6 +18,9 @@ export default function Home() {
       <Text>this is Home</Text>
       <TouchableOpacity onPress={() => navigate(DETAIL)}>
         <Text>Go to Detail!</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigate(INPUT)}>
+        <Text>Go to modal!</Text>
       </TouchableOpacity>
     </View>
   );
