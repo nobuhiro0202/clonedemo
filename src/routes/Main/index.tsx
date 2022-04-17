@@ -21,27 +21,42 @@ import Statistics from './Statistics';
 import UserInfo from './UserInfo';
 import * as UiContext from '../../contexts/ui';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { COLOR } from '../../Constants/theme';
+import { headerStyle, headerTintColor } from '../Header';
 
 const 
-Stack = createStackNavigator(),
-ChooseLoginStack = createStackNavigator(),
-Tab = createBottomTabNavigator(),
-HomeDrawer = createDrawerNavigator(),
-StatisticsDrawer = createDrawerNavigator();
-
-const forFade = ({ current }: StackCardInterpolationProps) => ({
-  cardStyle: {
-    opacity: current.progress
-  }
-});
-
-const getActiveRouteName = (route: any): string => {
-  return getFocusedRouteNameFromRoute(route) === 'USER_INFO' ? 'none' : 'flex';
-}
+  Stack = createStackNavigator(),
+  ChooseLoginStack = createStackNavigator(),
+  Tab = createBottomTabNavigator(),
+  HomeDrawer = createDrawerNavigator(),
+  StatisticsDrawer = createDrawerNavigator(),
+  cardStyle = {
+    backgroundColor: COLOR.MAIN,
+  },
+  drawerStyle = {
+    backgroundColor: COLOR.MAIN,
+  },
+  drawerActive = COLOR.PRIMARY,
+  drawerInactive = COLOR.WHITE,
+  forFade = ({ current }: StackCardInterpolationProps) => ({
+    cardStyle: {
+      opacity: current.progress
+    }
+  }),
+  getActiveRouteName = (route: any): string => {
+    return getFocusedRouteNameFromRoute(route) === 'USER_INFO' ? 'none' : 'flex';
+  };
 
 function HomeWithDrawer() {
   return (
-    <HomeDrawer.Navigator initialRouteName={HOME}>
+    <HomeDrawer.Navigator 
+      initialRouteName={HOME}
+      screenOptions={{
+        drawerStyle: drawerStyle,
+        drawerActiveTintColor: drawerActive,
+        drawerInactiveTintColor: drawerInactive,
+      }}
+    >
       <HomeDrawer.Screen 
         name={HOME} 
         component={Home} 
@@ -58,7 +73,14 @@ function HomeWithDrawer() {
 
 function StatisticsWithDrawer() {
   return (
-    <StatisticsDrawer.Navigator initialRouteName={STATISTICS}>
+    <StatisticsDrawer.Navigator 
+      initialRouteName={STATISTICS}
+      screenOptions={{
+        drawerStyle: drawerStyle,
+        drawerActiveTintColor: drawerActive,
+        drawerInactiveTintColor: drawerInactive,
+      }}
+    >
       <StatisticsDrawer.Screen 
         name={STATISTICS} 
         component={Statistics} 
@@ -77,8 +99,10 @@ function TabRoutes() {
   return (
     <Tab.Navigator 
       initialRouteName={HOME} 
-      activeColor="#e91e63"
-      barStyle={{ backgroundColor: 'tomato' }}
+      screenOptions={{
+        tabBarActiveTintColor: COLOR.PRIMARY,
+        tabBarInactiveTintColor: 'gray',
+      }}
     >
       <Tab.Screen 
         name={HOME} 
@@ -106,7 +130,10 @@ function TabRoutes() {
 
 function ChooseLoginNavigator() {
   return (
-    <ChooseLoginStack.Navigator initialRouteName={CHOOSE_LOGIN}>
+    <ChooseLoginStack.Navigator 
+      initialRouteName={CHOOSE_LOGIN}
+      screenOptions={{ cardStyle, headerStyle, headerTintColor }}
+    >
       <ChooseLoginStack.Screen name={CHOOSE_LOGIN} component={ChooseLogin} />
       <ChooseLoginStack.Screen name={SIGN_IN} component={SignIn} />
       <ChooseLoginStack.Screen name={SIGN_UP} component={SignUp} />
